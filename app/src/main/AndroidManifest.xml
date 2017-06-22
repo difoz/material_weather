@@ -7,7 +7,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="新闻"
         android:supportsRtl="true"
-        android:name=".utils.MyApplication"
+        android:name="org.litepal.LitePalApplication"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
