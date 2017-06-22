@@ -1,4 +1,4 @@
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,13 +6,13 @@
     tools:context="com.weather.material.fragments.WeaFragment">
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/weaFrag_floatBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/weaFrag_floatBtn"
-        android:src="@drawable/ic_done"
-        android:layout_marginLeft="280dp"
-        android:layout_marginTop="450dp"
         android:elevation="8dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="480dp"
+        android:src="@drawable/ic_done"
         />
 
-</RelativeLayout>
+</FrameLayout>

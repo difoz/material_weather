@@ -4,12 +4,16 @@ package com.weather.material.fragments;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.weather.material.MainActivity;
 import com.weather.material.R;
+import com.weather.material.fragments.wea_area_item.AreaFragment;
 import com.weather.material.utils.MyApplication;
 
 /**
@@ -38,6 +42,13 @@ public class WeaFragment extends Fragment
             public void onClick(View view)
             {
                 Toast.makeText(MyApplication.getContext(),"clicked",Toast.LENGTH_SHORT).show();
+                /*
+                * 通过getActivity()方法获得活动，从而调用活动中的方法。
+                * */
+                MainActivity activity = (MainActivity) getActivity();
+                FragmentTransaction replace = activity.getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new AreaFragment());
+                replace.addToBackStack(null);
+                replace.commit();
             }
         });
 

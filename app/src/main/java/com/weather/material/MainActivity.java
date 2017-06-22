@@ -16,6 +16,7 @@ import com.weather.material.fragments.AboutFragment;
 import com.weather.material.fragments.NewsFragment;
 import com.weather.material.fragments.PicFramgent;
 import com.weather.material.fragments.WeaFragment;
+import com.weather.material.fragments.wea_area_item.AreaFragment;
 import com.weather.material.utils.ActivityCollector;
 import com.weather.material.utils.BaseActivity;
 import com.weather.material.utils.MyApplication;
@@ -90,6 +91,7 @@ public class MainActivity extends BaseActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new AboutFragment()).commit();
         toolbar.setTitle("关于");
     }
+
     //跳转新闻Fragment
     private void SwitchToNews()
     {

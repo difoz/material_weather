@@ -26,14 +26,14 @@
                 android:background="#2cc3c9"
                 android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_scrollFlags="scroll|enterAlways|snap"
                 />
+                <!--app:layout_scrollFlags="scroll|enterAlways|snap"-->
         </android.support.design.widget.AppBarLayout>
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/fl_inner_mainActivity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             />
 
