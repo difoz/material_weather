@@ -76,6 +76,9 @@ public class MainActivity extends BaseActivity
                         SwitchToAbout();
                         drawer_layout.closeDrawers();
                         break;
+                    case R.id.exit:
+                        ActivityCollector.finishAllActivity();
+                        break;
                 }
                 return true;
             }
@@ -127,8 +130,8 @@ public class MainActivity extends BaseActivity
                 Toast.makeText(MyApplication.getContext(), "退出", Toast.LENGTH_SHORT).show();
                 ActivityCollector.finishAllActivity();
                 break;
-            case R.id.setting:
-                Toast.makeText(MyApplication.getContext(), "点击了设置", Toast.LENGTH_SHORT).show();
+            case R.id.about:
+                SwitchToAbout();
                 break;
         }
         return true;
