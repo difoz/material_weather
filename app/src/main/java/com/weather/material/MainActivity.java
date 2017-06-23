@@ -3,6 +3,7 @@ package com.weather.material;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -27,6 +28,8 @@ public class MainActivity extends BaseActivity
     private DrawerLayout drawer_layout;
     private NavigationView nav_view;
     private Toolbar toolbar;
+    private NewsFragment newsFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -85,25 +88,33 @@ public class MainActivity extends BaseActivity
             }
         });
     }
+
     //跳转到关于界面fragment
     private void SwitchToAbout()
     {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new AboutFragment()).commit();
+        /*FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.remove(newsFragment).commit();*/
+        FragmentTransaction replace = getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new AboutFragment());
+        replace.commit();
         toolbar.setTitle("关于");
     }
 
     //跳转新闻Fragment
     private void SwitchToNews()
     {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new NewsFragment()).commit();
+        newsFragment = new NewsFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fl_inner_mainActivity,newsFragment).commit();
         toolbar.setTitle("新闻");
     }
+
     //跳转图片Fragment
     private void SwitchToPic()
     {
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new PicFramgent()).commit();
         toolbar.setTitle("图片");
     }
+
     //跳转天气Fragment
     private void SwitchToWeather()
     {

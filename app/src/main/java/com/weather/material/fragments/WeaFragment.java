@@ -47,7 +47,10 @@ public class WeaFragment extends Fragment
                 * */
                 MainActivity activity = (MainActivity) getActivity();
                 FragmentTransaction replace = activity.getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new AreaFragment());
+                /*
+                * 往栈内空间存储
                 replace.addToBackStack(null);
+                * */
                 replace.commit();
             }
         });
