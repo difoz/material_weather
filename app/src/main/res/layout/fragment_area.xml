@@ -5,18 +5,9 @@
     android:layout_height="match_parent"
     tools:context="com.weather.material.fragments.wea_area_item.AreaFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/AreaFrag_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="今天要跳转的界面"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="今天要跳转的界面"/>
-
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/AreaFrag_listview"
+        />
 </RelativeLayout>

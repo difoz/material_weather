@@ -16,6 +16,8 @@ import com.weather.material.R;
 import com.weather.material.fragments.wea_area_item.AreaFragment;
 import com.weather.material.utils.MyApplication;
 
+import org.litepal.LitePal;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -41,7 +43,6 @@ public class WeaFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                Toast.makeText(MyApplication.getContext(),"clicked",Toast.LENGTH_SHORT).show();
                 /*
                 * 通过getActivity()方法获得活动，从而调用活动中的方法。
                 * */
@@ -52,6 +53,10 @@ public class WeaFragment extends Fragment
                 replace.addToBackStack(null);
                 * */
                 replace.commit();
+                /*
+                * 进行一步数据库操作 测试数据库是否创建成功！
+                * */
+                //LitePal.getDatabase();
             }
         });
 

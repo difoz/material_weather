@@ -8,7 +8,7 @@
         For example:
         <dbname value="demo" />
     -->
-    <dbname value="weather" />
+    <dbname value="weather_1" />
 
     <!--
         Define the version of your database. Each time you want
@@ -32,6 +32,10 @@
         </list>
     -->
     <list>
+        <mapping class="com.weather.material.db.Province_db"/>
+        <mapping class="com.weather.material.db.City_db"/>
+        <mapping class="com.weather.material.db.County_db"/>
+        <mapping class="com.weather.material.test.d"/>
 
     </list>
 
