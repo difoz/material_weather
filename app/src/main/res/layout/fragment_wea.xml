@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     tools:context="com.weather.material.fragments.WeaFragment">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ttttt"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/weaFrag_floatBtn"
         android:layout_width="wrap_content"

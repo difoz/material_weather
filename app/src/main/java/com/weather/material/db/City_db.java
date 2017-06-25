@@ -18,18 +18,29 @@ public class City_db extends DataSupport
     private int id;
     @SerializedName("name")
     private String City;
-    private String CityId;
+    private int CityId;
+    private String Sub_Province;
 
-    public String getCityId()
+
+    public int getCityId()
     {
         return CityId;
     }
 
-    public void setCityId(String cityId)
+    public void setCityId(int cityId)
     {
         CityId = cityId;
     }
 
+    public String getSub_Province()
+    {
+        return Sub_Province;
+    }
+
+    public void setSub_Province(String sub_Province)
+    {
+        Sub_Province = sub_Province;
+    }
 
     public int getId()
     {

@@ -35,7 +35,6 @@
         <mapping class="com.weather.material.db.Province_db"/>
         <mapping class="com.weather.material.db.City_db"/>
         <mapping class="com.weather.material.db.County_db"/>
-        <mapping class="com.weather.material.test.d"/>
 
     </list>
 

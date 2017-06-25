@@ -14,6 +14,18 @@ public class Province
     private int id;
     private String name;
 
+    public String getProvinceID()
+    {
+        return ProvinceID;
+    }
+
+    public void setProvinceID(String provinceID)
+    {
+        ProvinceID = provinceID;
+    }
+
+    private String ProvinceID;
+
     public int getId()
     {
         return id;
