@@ -38,8 +38,6 @@ import okhttp3.Response;
  */
 public class AreaFragment extends Fragment
 {
-
-
     private static final int LEVEL_PROVINCE = 1;
     private static final int LEVEL_CITY = 2;
     private static final int LEVEL_COUNTY = 3;
