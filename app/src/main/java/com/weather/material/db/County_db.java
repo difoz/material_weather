@@ -19,19 +19,30 @@ public class County_db extends DataSupport
     private int id;
     @SerializedName("name")
     private String County;
+    private int CountyId;
+    private String weather_id;
+    private String Sub_CityName;
 
-    public String getCountyId()
+    public String getSub_CityName()
+    {
+        return Sub_CityName;
+    }
+
+    public void setSub_CityName(String sub_CityName)
+    {
+        Sub_CityName = sub_CityName;
+    }
+
+    public int getCountyId()
     {
         return CountyId;
     }
 
-    public void setCountyId(String countyId)
+    public void setCountyId(int countyId)
     {
         CountyId = countyId;
     }
 
-    private String CountyId;
-    private String weather_id;
 
     public int getId()
     {

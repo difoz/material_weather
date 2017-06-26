@@ -1,7 +1,6 @@
 package com.weather.material.fragments.wea_area_item;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,12 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.weather.material.R;
 import com.weather.material.db.City_db;
+import com.weather.material.db.County_db;
 import com.weather.material.db.Province_db;
 import com.weather.material.utils.GlobalContent;
 import com.weather.material.utils.HttpUtil;
@@ -47,11 +46,13 @@ public class AreaFragment extends Fragment
     private ListView listview;
     private String url_listview_item;
     private List<Province_db> province_nameList;
-    private String selectCityName;
+    private String selectCityName_subProvince;
+    private String SelectCountyName_subCity;
+    private List<County_db> county_nameList;
+    private List<City_db> city_nameList;
 
     public AreaFragment()
     {
-        // Required empty public constructor
     }
 
     private static final String TAG = "AreaFragment";
@@ -83,9 +84,21 @@ public class AreaFragment extends Fragment
                 {
                     case LEVEL_PROVINCE:
                         url_listview_item = GlobalContent.SERVER_URL + province_nameList.get(position).getProvinceId();
-                        selectCityName = province_nameList.get(position).getProvince();
-                        Log.i(TAG, url_listview_item);
+                        //http://guolin.tech/api/china/15
+                        selectCityName_subProvince = province_nameList.get(position).getProvince();
+                        //Log.i(TAG, url_listview_item);
                         QueryCity();
+                        break;
+                    case LEVEL_CITY:
+                        url_listview_item = url_listview_item + '/' + city_nameList.get(position).getCityId();
+                        //http://guolin.tech/api/china/15/111
+                        //所选乡县所属的城市
+                        SelectCountyName_subCity = city_nameList.get(position).getCity();
+                        QueryCounty();
+                        break;
+                    case LEVEL_COUNTY:
+                        
+                        QueryCounty();
                         break;
                 }
             }
@@ -172,11 +185,11 @@ public class AreaFragment extends Fragment
     private void QueryCity()
     {
         //查找此省下面的城市级数据
-        List<City_db> cityDbs = DataSupport.where("Sub_Province=?", selectCityName).find(City_db.class);
-        if (cityDbs.size() > 0)
+        city_nameList = DataSupport.where("Sub_Province=?", selectCityName_subProvince).find(City_db.class);
+        if (city_nameList.size() > 0)
         {
             listView_item_name.clear();
-            for (City_db db : cityDbs)
+            for (City_db db : city_nameList)
             {
                 listView_item_name.add(db.getCity());
             }
@@ -204,7 +217,7 @@ public class AreaFragment extends Fragment
                 public void onResponse(Call call, Response response) throws IOException
                 {
                     String str = response.body().string();
-                    if (HttpUtil.handleCityData(str, selectCityName))
+                    if (HttpUtil.handleCityData(str, selectCityName_subProvince))
                     {
                         //递归完后(if执行true完成后，通知listview进行刷新)
                         getActivity().runOnUiThread(new Runnable()
@@ -222,7 +235,63 @@ public class AreaFragment extends Fragment
                 }
             });
         }
-        LEVEL_CURRENT=LEVEL_CITY;
+        LEVEL_CURRENT = LEVEL_CITY;
+    }
+
+    /**
+     * 查询 乡县 数据并存储到数据库中
+     */
+    private void QueryCounty()
+    {
+        county_nameList = DataSupport.where("Sub_CityName=?", SelectCountyName_subCity).find(County_db.class);
+        if (county_nameList.size() > 0)
+        {
+            listView_item_name.clear();
+            for (County_db db : county_nameList)
+            {
+                listView_item_name.add(db.getCounty());
+            }
+            getActivity().runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    myAdapter.notifyDataSetChanged();
+                }
+            });
+        } else
+        {
+            HttpUtil.sendOkHttpRequset(url_listview_item, new Callback()
+            {
+                @Override
+                public void onFailure(Call call, IOException e)
+                {
+                    Log.i(TAG, "onFailure: 从网络读取乡县级数据错误");
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException
+                {
+                    String str = response.body().string();
+                    if (HttpUtil.handleCountyData(str,SelectCountyName_subCity))
+                    {
+                        getActivity().runOnUiThread(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                QueryCounty();
+                            }
+                        });
+                    }
+                    else 
+                    {
+                        Log.i(TAG, "onResponse: 数据库存储乡县级数据错误，save返回false");
+                    }
+                }
+            });
+        }
+        LEVEL_CURRENT = LEVEL_COUNTY;
     }
 
     /**
