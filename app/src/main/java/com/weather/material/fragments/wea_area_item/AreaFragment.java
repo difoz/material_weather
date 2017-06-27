@@ -1,9 +1,13 @@
 package com.weather.material.fragments.wea_area_item;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,12 +54,38 @@ public class AreaFragment extends Fragment
     private String SelectCountyName_subCity;
     private List<County_db> county_nameList;
     private List<City_db> city_nameList;
+    private Activity mAct;
+    private Toolbar toolbar_mainActivity;
 
-    public AreaFragment()
-    {
-    }
+    public AreaFragment(){}
 
     private static final String TAG = "AreaFragment";
+
+    /**
+     * 防止getActivity()方法获得的activity为空 http://www.jianshu.com/p/9d75e328f1de中的方法一
+     */
+    /*@Override
+    public void onAttach(Activity activity)
+    {
+        super.onAttach(activity);
+        mAct = activity;
+    }*/
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        mAct= (Activity) context;
+    }
+
+    /**
+     * 防止getActivity()方法获得的activity为空 http://www.jianshu.com/p/9d75e328f1de中的方法一
+     */
+    @Override
+    public void onDetach()
+    {
+        super.onDetach();
+        mAct=null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -66,7 +96,13 @@ public class AreaFragment extends Fragment
         listview = (ListView) view.findViewById(R.id.AreaFrag_listview);
         myAdapter = new myAdapter();
         listview.setAdapter(myAdapter);
+        //控制toolbar的显示
+        toolbar_mainActivity = (Toolbar) mAct.findViewById(R.id.toolbar);
 
+        //尝试toolbar的隐藏与滚动
+        AppBarLayout appbar = (AppBarLayout) mAct.findViewById(R.id.appbar_mainActivity);
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) appbar.getChildAt(0).getLayoutParams();
+        params.setScrollFlags(0);
         return view;
     }
 
@@ -86,6 +122,7 @@ public class AreaFragment extends Fragment
                         url_listview_item = GlobalContent.SERVER_URL + province_nameList.get(position).getProvinceId();
                         //http://guolin.tech/api/china/15
                         selectCityName_subProvince = province_nameList.get(position).getProvince();
+                        toolbar_mainActivity.setTitle(selectCityName_subProvince);
                         //Log.i(TAG, url_listview_item);
                         QueryCity();
                         break;
@@ -94,10 +131,10 @@ public class AreaFragment extends Fragment
                         //http://guolin.tech/api/china/15/111
                         //所选乡县所属的城市
                         SelectCountyName_subCity = city_nameList.get(position).getCity();
+                        toolbar_mainActivity.setTitle(SelectCountyName_subCity);
                         QueryCounty();
                         break;
                     case LEVEL_COUNTY:
-                        
                         QueryCounty();
                         break;
                 }
@@ -115,6 +152,7 @@ public class AreaFragment extends Fragment
      */
     private void QueryProvince()
     {
+        toolbar_mainActivity.setTitle("中国");
         /**
          * 查找全部省级数据集合，清理listview的item链表。赋值item并显示在listview上
          */
