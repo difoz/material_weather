@@ -1,7 +1,11 @@
 package com.weather.material.fragments;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -25,10 +29,26 @@ public class WeaFragment extends Fragment
 {
 
 
+    private Activity mAct;
+
     public WeaFragment()
     {
     }
 
+
+    @Override
+    public void onAttach(Context context)
+    {
+        super.onAttach(context);
+        mAct = (Activity) context;
+    }
+
+    @Override
+    public void onDetach()
+    {
+        super.onDetach();
+        mAct = null;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,9 +79,17 @@ public class WeaFragment extends Fragment
                 //LitePal.getDatabase();
             }
         });
-
-
+        //尝试toolbar的隐藏与滚动
+       /* AppBarLayout appbar = (AppBarLayout) mAct.findViewById(R.id.appbar_mainActivity);
+        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) appbar.getChildAt(0).getLayoutParams();
+        params.setScrollFlags(0);*/
+        //appbar.setExpanded(false);
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+    }
 }

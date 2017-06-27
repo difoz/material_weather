@@ -99,10 +99,7 @@ public class AreaFragment extends Fragment
         //控制toolbar的显示
         toolbar_mainActivity = (Toolbar) mAct.findViewById(R.id.toolbar);
 
-        //尝试toolbar的隐藏与滚动
-        AppBarLayout appbar = (AppBarLayout) mAct.findViewById(R.id.appbar_mainActivity);
-        AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) appbar.getChildAt(0).getLayoutParams();
-        params.setScrollFlags(0);
+
         return view;
     }
 

@@ -2,6 +2,7 @@ package com.weather.material;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -29,6 +30,8 @@ public class MainActivity extends BaseActivity
     private NavigationView nav_view;
     private Toolbar toolbar;
     private NewsFragment newsFragment;
+    private AppBarLayout appbar;
+    private AppBarLayout.LayoutParams params;
 
 
     @Override
@@ -55,6 +58,11 @@ public class MainActivity extends BaseActivity
         //侧边栏
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         nav_view.setCheckedItem(R.id.news);
+        //appbar 特定界面 appbar不进行滚动隐藏
+        appbar = (AppBarLayout)findViewById(R.id.appbar_mainActivity);
+        params = (AppBarLayout.LayoutParams) appbar.getChildAt(0).getLayoutParams();
+
+
         //初始跳入新闻
         SwitchToNews();
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener()
@@ -102,9 +110,11 @@ public class MainActivity extends BaseActivity
     //跳转新闻Fragment
     private void SwitchToNews()
     {
+        //app:layout_scrollFlags="scroll|enterAlways|snap" 代码设置appbar的滚动隐藏功能
+        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS|AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
         newsFragment = new NewsFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fl_inner_mainActivity,newsFragment).commit();
+        transaction.replace(R.id.fl_inner_mainActivity, newsFragment).commit();
         toolbar.setTitle("新闻");
     }
 
@@ -118,6 +128,8 @@ public class MainActivity extends BaseActivity
     //跳转天气Fragment
     private void SwitchToWeather()
     {
+        //不许appbar进行滚动隐藏
+        params.setScrollFlags(0);
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new WeaFragment()).commit();
         toolbar.setTitle("天气");
     }
