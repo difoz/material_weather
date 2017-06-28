@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/WeaFragment"
     tools:context="com.weather.material.fragments.WeaFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/tv_weatherFrag"
         android:text="ttttt"/>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/weaFrag_floatBtn"

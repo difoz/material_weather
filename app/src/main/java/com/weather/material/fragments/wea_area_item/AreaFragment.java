@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +21,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.weather.material.MainActivity;
 import com.weather.material.R;
 import com.weather.material.db.City_db;
 import com.weather.material.db.County_db;
 import com.weather.material.db.Province_db;
+import com.weather.material.fragments.WeaFragment;
 import com.weather.material.utils.GlobalContent;
 import com.weather.material.utils.HttpUtil;
 import com.weather.material.utils.MyApplication;
@@ -56,8 +61,14 @@ public class AreaFragment extends Fragment
     private List<City_db> city_nameList;
     private Activity mAct;
     private Toolbar toolbar_mainActivity;
+    private String urlWeather;
+    private WeaFragment weaFragment;
+    private MainActivity mainActivity;
+    private DrawerLayout drawerLayout;
 
-    public AreaFragment(){}
+    public AreaFragment()
+    {
+    }
 
     private static final String TAG = "AreaFragment";
 
@@ -74,7 +85,7 @@ public class AreaFragment extends Fragment
     public void onAttach(Context context)
     {
         super.onAttach(context);
-        mAct= (Activity) context;
+        mAct = (Activity) context;
     }
 
     /**
@@ -84,7 +95,7 @@ public class AreaFragment extends Fragment
     public void onDetach()
     {
         super.onDetach();
-        mAct=null;
+        mAct = null;
     }
 
     @Override
@@ -98,8 +109,6 @@ public class AreaFragment extends Fragment
         listview.setAdapter(myAdapter);
         //控制toolbar的显示
         toolbar_mainActivity = (Toolbar) mAct.findViewById(R.id.toolbar);
-
-
         return view;
     }
 
@@ -107,6 +116,20 @@ public class AreaFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        //获取MainActivity对象
+        mainActivity = (MainActivity) getActivity();
+        //通过mainactivity对象控制actionbar的显示
+        ActionBar actionBar = mainActivity.getSupportActionBar();
+        if (actionBar != null)
+        {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
+        }
+        //drawerLayout的展开与闭合
+        drawerLayout = (DrawerLayout) mainActivity.findViewById(R.id.drawer_Layout);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);//禁止滑动控制侧边菜单
+        //drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);//允许滑动控制侧边菜单
+
         //设置listview的点击监听
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -133,15 +156,20 @@ public class AreaFragment extends Fragment
                         break;
                     case LEVEL_COUNTY:
                         QueryCounty();
+                        //不知道为什么不行？mAct与getActivity()方法获得的activity不一样？
+                        //android.app.Fragment WeaFragment = mAct.getFragmentManager().findFragmentById(R.id.WeaFragment);
+                        urlWeather = GlobalContent.SERVER_WEATHER + county_nameList.get(position).getWeather_id() + GlobalContent.WEATHER_KEY;
+                        weaFragment = (WeaFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.WeaFragment);
+
+
+                        mainActivity.SwitchToWeather();
+                        //weaFragment.SetData(urlWeather);
                         break;
                 }
             }
         });
-        /**
-         * 首先进行省级数据的查询
-         */
+        //* 首先进行省级数据的查询
         QueryProvince();
-
     }
 
     /**
@@ -308,7 +336,7 @@ public class AreaFragment extends Fragment
                 public void onResponse(Call call, Response response) throws IOException
                 {
                     String str = response.body().string();
-                    if (HttpUtil.handleCountyData(str,SelectCountyName_subCity))
+                    if (HttpUtil.handleCountyData(str, SelectCountyName_subCity))
                     {
                         getActivity().runOnUiThread(new Runnable()
                         {
@@ -318,8 +346,7 @@ public class AreaFragment extends Fragment
                                 QueryCounty();
                             }
                         });
-                    }
-                    else 
+                    } else
                     {
                         Log.i(TAG, "onResponse: 数据库存储乡县级数据错误，save返回false");
                     }

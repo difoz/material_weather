@@ -1,5 +1,6 @@
 package com.weather.material;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -40,21 +41,19 @@ public class MainActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-
-        /**
-         * toolbar
-         */
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         //drawerlayout
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_Layout);
+
+        //toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
         {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
-
+        WeaFragment fragmentById = (WeaFragment) getSupportFragmentManager().findFragmentById(R.id.WeaFragment);
         //侧边栏
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         nav_view.setCheckedItem(R.id.news);
@@ -108,9 +107,9 @@ public class MainActivity extends BaseActivity
     }
 
     //跳转新闻Fragment
-    private void SwitchToNews()
+    public void SwitchToNews()
     {
-        //app:layout_scrollFlags="scroll|enterAlways|snap" 代码设置appbar的滚动隐藏功能
+        //代码设置appbar的滚动隐藏功能 app:layout_scrollFlags="scroll|enterAlways|snap"
         params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS|AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
         newsFragment = new NewsFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -126,7 +125,7 @@ public class MainActivity extends BaseActivity
     }
 
     //跳转天气Fragment
-    private void SwitchToWeather()
+    public void SwitchToWeather()
     {
         //不许appbar进行滚动隐藏
         params.setScrollFlags(0);

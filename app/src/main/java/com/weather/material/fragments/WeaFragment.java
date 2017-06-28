@@ -1,6 +1,5 @@
 package com.weather.material.fragments;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.weather.material.MainActivity;
@@ -27,14 +27,10 @@ import org.litepal.LitePal;
  */
 public class WeaFragment extends Fragment
 {
-
-
     private Activity mAct;
+    private TextView tv;
 
-    public WeaFragment()
-    {
-    }
-
+    public WeaFragment(){}
 
     @Override
     public void onAttach(Context context)
@@ -63,27 +59,20 @@ public class WeaFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                /*
-                * 通过getActivity()方法获得活动，从而调用活动中的方法。
-                * */
+                //通过getActivity()方法获得活动，从而调用活动中的方法。
                 MainActivity activity = (MainActivity) getActivity();
                 FragmentTransaction replace = activity.getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity, new AreaFragment());
-                /*
-                * 往栈内空间存储
-                replace.addToBackStack(null);
-                * */
+                //往栈内空间存储
+                //replace.addToBackStack(null);
                 replace.commit();
-                /*
-                * 进行一步数据库操作 测试数据库是否创建成功！
-                * */
-                //LitePal.getDatabase();
             }
         });
         //尝试toolbar的隐藏与滚动
        /* AppBarLayout appbar = (AppBarLayout) mAct.findViewById(R.id.appbar_mainActivity);
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) appbar.getChildAt(0).getLayoutParams();
         params.setScrollFlags(0);*/
-        //appbar.setExpanded(false);
+        //检查网址是否传递成功
+        tv = (TextView) view.findViewById(R.id.tv_weatherFrag);
         return view;
     }
 
@@ -91,5 +80,10 @@ public class WeaFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    public void SetData(String str)
+    {
+        tv.setText(str);
     }
 }
