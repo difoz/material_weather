@@ -133,6 +133,18 @@ public class MainActivity extends BaseActivity
         toolbar.setTitle("天气");
     }
 
+    public void SwitchAreaFragToWeaFrag(String urlWeather)
+    {
+        toolbar.setTitle("天气");
+        params.setScrollFlags(0);
+        //通过bundle传递数据-从AreaFragment传递数据到MainActivity
+        WeaFragment weaFragment = new WeaFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("Data", urlWeather);
+        weaFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_inner_mainActivity,weaFragment).commit();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

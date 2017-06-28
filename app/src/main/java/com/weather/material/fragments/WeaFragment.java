@@ -72,7 +72,12 @@ public class WeaFragment extends Fragment
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) appbar.getChildAt(0).getLayoutParams();
         params.setScrollFlags(0);*/
         //检查网址是否传递成功
+        //从AreaFragment通过activity传过来的urlWeather
         tv = (TextView) view.findViewById(R.id.tv_weatherFrag);
+        Bundle bundle = getArguments();
+        if(bundle!=null){
+            tv.setText(bundle.getString("Data"));
+        }
         return view;
     }
 

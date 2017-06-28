@@ -2,12 +2,11 @@ package com.weather.material.fragments.wea_area_item;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +25,6 @@ import com.weather.material.R;
 import com.weather.material.db.City_db;
 import com.weather.material.db.County_db;
 import com.weather.material.db.Province_db;
-import com.weather.material.fragments.WeaFragment;
 import com.weather.material.utils.GlobalContent;
 import com.weather.material.utils.HttpUtil;
 import com.weather.material.utils.MyApplication;
@@ -62,9 +60,9 @@ public class AreaFragment extends Fragment
     private Activity mAct;
     private Toolbar toolbar_mainActivity;
     private String urlWeather;
-    private WeaFragment weaFragment;
     private MainActivity mainActivity;
     private DrawerLayout drawerLayout;
+    private ProgressDialog progressDialog;
 
     public AreaFragment()
     {
@@ -159,11 +157,12 @@ public class AreaFragment extends Fragment
                         //不知道为什么不行？mAct与getActivity()方法获得的activity不一样？
                         //android.app.Fragment WeaFragment = mAct.getFragmentManager().findFragmentById(R.id.WeaFragment);
                         urlWeather = GlobalContent.SERVER_WEATHER + county_nameList.get(position).getWeather_id() + GlobalContent.WEATHER_KEY;
-                        weaFragment = (WeaFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.WeaFragment);
-
-
-                        mainActivity.SwitchToWeather();
+                        //weaFragment = (WeaFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.WeaFragment);
+                        //WeaFragment weaFragment = (WeaFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.AreaFragment);
+                        //FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        //transaction.hide(this);
                         //weaFragment.SetData(urlWeather);
+                        mainActivity.SwitchAreaFragToWeaFrag(urlWeather);
                         break;
                 }
             }
@@ -203,6 +202,7 @@ public class AreaFragment extends Fragment
          */
         else
         {
+            ShowProgressDialog();
             HttpUtil.sendOkHttpRequset(GlobalContent.SERVER_URL, new Callback()
             {
                 @Override
@@ -229,6 +229,7 @@ public class AreaFragment extends Fragment
                             public void run()
                             {
                                 QueryProvince();
+                                CloseProgressDialog();
                             }
                         });
                         //Log.i(TAG, "onResponse: 数据库存储正确");
@@ -262,12 +263,14 @@ public class AreaFragment extends Fragment
                 public void run()
                 {
                     myAdapter.notifyDataSetChanged();
+                    listview.setSelection(0);
                 }
             });
         }
         //若数据库中没有此省的下属信息 则通过网络进行查询
         else
         {
+            ShowProgressDialog();
             HttpUtil.sendOkHttpRequset(url_listview_item, new Callback()
             {
                 @Override
@@ -289,6 +292,7 @@ public class AreaFragment extends Fragment
                             public void run()
                             {
                                 QueryCity();
+                                CloseProgressDialog();
                             }
                         });
                     } else
@@ -320,10 +324,12 @@ public class AreaFragment extends Fragment
                 public void run()
                 {
                     myAdapter.notifyDataSetChanged();
+                    listview.setSelection(0);
                 }
             });
         } else
         {
+            ShowProgressDialog();
             HttpUtil.sendOkHttpRequset(url_listview_item, new Callback()
             {
                 @Override
@@ -344,6 +350,7 @@ public class AreaFragment extends Fragment
                             public void run()
                             {
                                 QueryCounty();
+                                CloseProgressDialog();
                             }
                         });
                     } else
@@ -405,6 +412,30 @@ public class AreaFragment extends Fragment
             }
             holder.textView.setText(listView_item_name.get(i));
             return view;
+        }
+    }
+
+    /*
+    * 设置等待的进程对话框
+    * */
+    public void ShowProgressDialog()
+    {
+        /*当对话框为空是创建
+        * 否则直接实现弹出*/
+        if (progressDialog==null)
+        {
+            progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("请稍后");
+            progressDialog.setMessage("正在加载中....");
+        }
+        progressDialog.show();
+    }
+
+    public void CloseProgressDialog()
+    {
+        if (progressDialog!=null)
+        {
+            progressDialog.dismiss();
         }
     }
 }
